@@ -1,0 +1,31 @@
+def add():
+    if a[2] not in d:
+        d.append(a[2])
+        return('Successfully added',a[2])
+    else:
+        return('That name already exists')
+def connect():
+    k=[]
+    if (a[1] in d) and (a[2] in d):
+        if a[1]==a[2]:
+            return('Cannot connect device to itself')
+        elif a[1]!=a[2] and (a[1] not in k and a[2] not in k):
+            k.append(a[1])
+            k.append(a[2])
+            return('Successfully connected')
+    else:
+        return ('Node not found')
+def info():
+    if (a[1] in d and a[2] in d) and (R1!=a[1] or R1!=a[2]):
+        
+a=list(map(str(input().split(' '))))
+d=[]
+if len(a)==3:
+    if a[0]=='ADD':
+        print(add())
+    elif a[0]=="CONNECT":
+        print(connect())
+    elif a[0]=='info_route':
+        print(info())
+else:
+    print('invalid command syntax')
