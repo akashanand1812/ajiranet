@@ -1,31 +1,94 @@
-def add():
-    if a[2] not in d:
-        d.append(a[2])
-        return('Successfully added',a[2])
+a=[]
+def ak(b,c):
+    if b!="COMPUTER"  and b!="REPEATER":
+        return "ERROR:Invalid device tpye"
+    if c in a:
+        return "ERROR:Name already exists"
+    a.append(c)
+    return f"Sucessfully added {c}"
+def jack (c,strenght):
+    if c not in a:
+        return "Error:Device not found"
+    if not strenght.isnumeric():
+        return "Error:Invalid command synatx"
+    return f"Sucessfully set strenght for{c}"
+print(ak("COMPUTER","A1"))
+print(ak("COMPUTER","A2"))
+print(ak("COMPUTER","A3"))
+print(ak("COMPUTER","A1"))
+print(ak("COMPUTER","A4"))
+print(ak("COMPUTER","A5"))
+print(ak("COMPUTER","A6"))
+print(ak("REPEATER","R1"))
+print(ak("PHONE","A1"))
+
+
+
+connected_devices = {}
+MAX_DEVICE_ID = 5
+
+def connect(device1, device2):
+    if not device1 or not device2:
+        return "Error: Invalid device name."
+    if not (1 <= int(device1[1:]) <= MAX_DEVICE_ID) or not (1 <= int(device2[1:]) <= MAX_DEVICE_ID):
+        return "Error: Node not found."
+    if device1 == device2:
+        return "Error: Cannot connect device to itself."
+    if device1 in connected_devices:
+        if device2 in connected_devices[device1]:
+            return "Error: Devices are already connected."
+        connected_devices[device1].append(device2)
     else:
-        return('That name already exists')
-def connect():
-    k=[]
-    if (a[1] in d) and (a[2] in d):
-        if a[1]==a[2]:
-            return('Cannot connect device to itself')
-        elif a[1]!=a[2] and (a[1] not in k and a[2] not in k):
-            k.append(a[1])
-            k.append(a[2])
-            return('Successfully connected')
-    else:
-        return ('Node not found')
-def info():
-    if (a[1] in d and a[2] in d) and (R1!=a[1] or R1!=a[2]):
-        
-a=list(map(str(input().split(' '))))
-d=[]
-if len(a)==3:
-    if a[0]=='ADD':
-        print(add())
-    elif a[0]=="CONNECT":
-        print(connect())
-    elif a[0]=='info_route':
-        print(info())
-else:
-    print('invalid command syntax')
+        connected_devices[device1] = [device2]
+    return "Successfully connected."
+
+print(connect("A1", "A2"))
+print(connect("A1", "A3"))
+print(connect("A1", "A1"))
+print(connect("A1", "A2"))
+print(connect("A5", "A4"))
+print(connect("R1", "A2"))
+print(connect("R1", "A5"))
+print(connect("A1", ""))
+print(connect("", ""))
+print(connect("A8", "A1"))
+print(connect("A2", "A4"))
+
+
+
+def get_route(src, dest):
+    nodes = {
+        "A1": ["A2","A3"],
+        "A2": ["A1", "A4", "R1"],
+        "A3": ["A1"],
+        "A4": ["A2"],
+        "R1": ["A5"],
+        "A5": []
+    }
+
+    if src not in nodes:
+        return "Error: Source node not found!"
+    if dest not in nodes:
+        return "Error: Root  not found!"
+    if dest[0] == 'R':
+        return "Error: Route cannot be calculated with a repeater."
+    if src == dest:
+        return f"{src}->{dest}"
+
+    queue = [(src, [src])]
+    while queue:
+        (node, path) = queue.pop(0)
+        for neighbor in nodes[node]:
+            if neighbor == dest:
+                return " -> ".join(path + [dest])
+            if neighbor not in path:
+                queue.append((neighbor, path + [neighbor]))
+    return ("Error: Route not found!")
+
+print(get_route("A1", "A4"))
+print(get_route("A1", "A5"))
+print(get_route("A4", "A3"))
+print(get_route("A1", "A1"))
+print(get_route("A1", "A6"))
+print(get_route("A2", "R1"))
+print(get_route("A1", "A10"))
